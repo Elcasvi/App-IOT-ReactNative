@@ -2,10 +2,11 @@ import {FlatList, StyleSheet, Text, View} from "react-native";
 import {DUMMY_DATA} from "../data/dummy";
 import {useEffect, useState} from "react";
 import firebaseDb from '../data/firebase'
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, onValue} from "firebase/database";
+
 export default function StackScreen()
 {
-
+    const db = firebaseDb
     //Iterar sobre una lista
     /*
     const renderItem=({item})=>
@@ -22,35 +23,49 @@ export default function StackScreen()
 
     const[dataDb,setDataDb]=useState(null);
     useEffect(() => {
-        console.log("Fire base data ---------------------------")
-        console.log(firebaseDb)
-        writeUserData("1","carlos","casvi","img")
+        //writeUserData("16","alberto","casvi","img")
+        getData()
     },[]);
     function writeUserData(userId, name, email, imageUrl) {
-        const db = getDatabase();
-        set(ref(db, 'users/' + userId), {
+        set(ref(db), {
             username: name,
             email: email,
             profile_picture: imageUrl
         }) ;
     }
-
+const getData=async()=>
+{
+    const starCountRef = ref(db);
+    await onValue(starCountRef, (snapshot) => {
+        const data = snapshot.val();
+        console.log(data)
+        console.log(typeof data)
+        setDataDb(data)
+    });
+}
 
 
     return(
         <View style={styles.container}>
+
             <Text style={styles.myText}>Hello from Stack</Text>
             <View style={{paddingTop: 20}}>
             {
-
-                DUMMY_DATA.map((item)=>
-                    <View key={item} style={{padding: 10}}>
-                        {<Text>{item.id}</Text>}
-                        {<Text>{item.title}</Text>}
-                        {<Text>{item.description}</Text>}
+                dataDb===null?<Text>...</Text>:
+                    <View>
+                        <Text>{dataDb.email}</Text>
+                        <Text>{dataDb.profile_picture}</Text>
+                        <Text>{dataDb.username}</Text>
                     </View>
+                    /*
+                    dataDb.map((item)=>
+                        <View key={item.email} style={{padding: 10}}>
+                            {<Text>{item.email}</Text>}
+                            {<Text>{item.profile_picture}</Text>}
+                            {<Text>{item.username}</Text>}
+                        </View>)
+                     */
 
-                )
             }
             </View>
         </View>
