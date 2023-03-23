@@ -8,7 +8,7 @@ import {NavigationContainer} from "@react-navigation/native";
 //Screens
 import HomeScreen from "../screens/HomeScreen";
 import SettingScreen from "../screens/SettingScreen";
-import StackScreen from "../screens/StackScreen";
+
 
 const HomeStackNavigator=createStackNavigator();
 const Tab=createBottomTabNavigator();
@@ -16,12 +16,9 @@ const Tab=createBottomTabNavigator();
 const MyStack=()=>
 {
     return(
-        <HomeStackNavigator.Navigator initialRouteName="HomeScreen">
-            <HomeStackNavigator.Screen name="Home" component={HomeScreen}/>
-            <HomeStackNavigator.Screen name="Stack" component={StackScreen}
-            options={{
-            headerBackTitleVisible:false}
-            }/>
+        <HomeStackNavigator.Navigator>
+            <HomeStackNavigator.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+            <HomeStackNavigator.Screen name="Stack" component={SettingScreen} options={{headerBackTitleVisible:false}}/>
         </HomeStackNavigator.Navigator>
     );
 }
@@ -35,7 +32,7 @@ const MyTabs=()=>
         }}>
             <Tab.Screen name="Home" component={MyStack}
                         options={{
-                            tabBarLabel:'Feed',
+                            tabBarLabel:'Home',
                             tabBarIcon:({color,size})=>(
                                 <MaterialCommunityIcons name="home" color={color} size={30}/>
                             ),
@@ -45,21 +42,11 @@ const MyTabs=()=>
 
             <Tab.Screen name="Setting" component={SettingScreen}
                         options={{
-                            tabBarLabel:'Setting',
+                            tabBarLabel:'Settings',
                             tabBarIcon:({color,size})=>(
                                 <MaterialCommunityIcons name="brightness-5" color={color} size={30}/>
                             ),
-                            tabBarBadge:10,
-                            headerShown:false
-                        }}/>
-
-            <Tab.Screen name="Stack" component={StackScreen}
-                        options={{
-                            tabBarLabel:'Stack',
-                            tabBarIcon:({color,size})=>(
-                                <MaterialCommunityIcons name="home" color={color} size={30}/>
-                            ),
-                            tabBarBadge:10,
+                            //tabBarBadge:10,
                             headerShown:false
                         }}/>
 

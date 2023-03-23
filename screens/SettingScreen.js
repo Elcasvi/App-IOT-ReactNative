@@ -1,9 +1,14 @@
-import {StyleSheet, Text, View} from "react-native";
+import {Button, StyleSheet, Text, View, FlatList, TouchableOpacity} from "react-native";
+import{useNavigation} from "@react-navigation/native";
 export default function SettingScreen()
 {
+    const navigation=useNavigation();
     return(
         <View style={styles.container}>
-            <Text style={styles.myText}>Hello from Setting</Text>
+            <Text style={{fontSize: 30}}>Hello from Settings</Text>
+            <TouchableOpacity style={styles.myBtn} onPress={()=>navigation.navigate("Home")}>
+                <Text style={{color:"#fff"}}>Go to Home</Text>
+            </TouchableOpacity>
         </View>
     )
 
@@ -13,7 +18,12 @@ const styles=StyleSheet.create({
         paddingTop:"20%",
         alignItems:"center"
     },
-    myText:{
-        fontSize:30
+    myBtn:{
+        backgroundColor:"purple",
+        padding:10,
+        marginTop:"20%",
+        width:"50%",
+        alignItems:"center",
+        borderRadius:35,
     }
 })
