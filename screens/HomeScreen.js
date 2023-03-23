@@ -190,7 +190,7 @@ export default function HomeScreen()
                                 {dataHC_SR04<=14?<TouchableOpacity style={styles.myBtnRed}/>:<></>}
                                 </View>
                             <View style={styles.card}>
-                                <Text style={styles.titleCard}>Semaforo</Text>
+                                <Text style={styles.titleCard}>Semáforo</Text>
                                 <Switch
                                     trackColor={{false: '#767577', true: '#81b0ff'}}
                                     thumbColor={isEnabledSem ? '#f5dd4b' : '#f4f3f4'}
@@ -265,8 +265,9 @@ const styles=StyleSheet.create({
     },
     card:{
         backgroundColor:"#fff",
-        margin:25,
+        margin:20,
         padding:15,
+        width:"37%",
         alignItems:"center",
         borderRadius:10
     },
