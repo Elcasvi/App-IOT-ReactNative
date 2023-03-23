@@ -1,12 +1,14 @@
 import {FlatList,Switch, StyleSheet, Text, View} from "react-native";
 import {useEffect, useState} from "react";
 import firebaseDb from '../data/firebase'
-import { getDatabase, ref, onValue,set} from "firebase/database";
+import { getDatabase, ref, onValue,set,update} from "firebase/database";
 import Card from './Card'
 
 export default function StackScreen()
 {
     const db = firebaseDb
+    const on=100
+    const off=0
     //Iterar sobre una lista
     /*
     const renderItem=({item})=>
@@ -23,6 +25,9 @@ export default function StackScreen()
     const[dataDHT11,setDataDbDHT11]=useState(0)
     const[dataHC_SR04,setDataDbHC_SR04]=useState(0)
     const[dataLDR,setDataDbLDR]=useState(0)
+    const [isEnabledDHT11, setIsEnabledDHT11] = useState(false);
+    const [isEnabledRedLight, setIsEnabledRedLight] = useState(false);
+    const [isEnabledSem, setIsEnabledSem] = useState(false);
 
     useEffect(() => {
         //writeUserData("2","0","2","1")
@@ -37,6 +42,65 @@ export default function StackScreen()
             Iluminacion: iluminacion,
             Temperatura: temperatura
         }) ;
+    }
+
+         
+    useEffect(()=>{
+        if(isEnabledDHT11)
+        {
+            console.log("Dentro de enabled")
+            activateDTH11(off)
+        }
+        else{
+            console.log("Dentro de disable")
+            activateDTH11(on)            
+        }
+    },[isEnabledDHT11])
+
+    useEffect(()=>{
+        if(isEnabledRedLight)
+        {
+            console.log("Dentro de enabled")
+            activateRedLigth(on)
+        }
+        else{
+            console.log("Dentro de disable")
+            activateRedLigth(off)
+        }
+            
+    },[isEnabledRedLight])
+
+    useEffect(()=>{
+        if(isEnabledSem)
+        {
+            console.log("Dentro de enabled")
+            activateSem(30)
+        }
+        else{
+            console.log("Dentro de disable")
+            activateSem(off)
+        }
+            
+    },[isEnabledSem])
+    
+
+
+
+ // value: 0 prendido, 100 apagado, ventilador
+    function activateDTH11(value) {
+        console.log("Dentro de la funcion", value);
+        update(ref(db,'Limites/'), {Calor: value});
+    }
+
+
+// value: 100 prendido, 0 apagado, alarma
+    function activateRedLigth(value) {
+        update(ref(db,'Limites/'), {Oscuridad: value});
+    }
+    
+    // VALUE: 30 se enciende, 0 apagado, el semaforo
+    function activateSem(value) {
+        update(ref(db,'Limites/'), {Lejania: value});
     }
 
 const getDataDHT11=()=>
@@ -76,9 +140,10 @@ const getDataDHT11=()=>
         });
     }
 
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
+    const toggleSwitchDht11 = () => setIsEnabledDHT11(previousState => !previousState);
+    const toggleSwitchRedLight = () => setIsEnabledRedLight(previousState => !previousState);
+    const toggleSwitchSem = () => setIsEnabledSem(previousState => !previousState);
+    
 
 
 
@@ -97,10 +162,28 @@ const getDataDHT11=()=>
                             <View style={styles.container}>
                                 <Switch
                                     trackColor={{false: '#767577', true: '#81b0ff'}}
-                                    thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                                    thumbColor={setIsEnabledDHT11 ? '#f5dd4b' : '#f4f3f4'}
                                     ios_backgroundColor="#3e3e3e"
-                                    onValueChange={toggleSwitch}
-                                    value={isEnabled}
+                                    onValueChange={toggleSwitchDht11}
+                                    value={isEnabledDHT11}
+                                />
+                            </View>
+                        </View>
+                }
+                {
+                    dataHC_SR04===0?<Text>...</Text>:
+                        <View style={styles.cardParent}>
+                            <View style={styles.card}>
+                                <Text style={styles.titleCard}>HC_SR04</Text>
+                                <Text>{dataHC_SR04}</Text>
+                            </View>
+                            <View style={styles.container}>
+                                <Switch
+                                    trackColor={{false: '#767577', true: '#81b0ff'}}
+                                    thumbColor={isEnabledSem ? '#f5dd4b' : '#f4f3f4'}
+                                    ios_backgroundColor="#3e3e3e"
+                                    onValueChange={toggleSwitchSem}
+                                    value={isEnabledSem}
                                 />
                             </View>
                         </View>
@@ -112,14 +195,14 @@ const getDataDHT11=()=>
                                 <Text style={styles.titleCard}>LDR</Text>
                                 <Text>{dataLDR}</Text>
                             </View>
-                        </View>
-                }
-                {
-                    dataHC_SR04===0?<Text>...</Text>:
-                        <View style={styles.cardParent}>
-                            <View style={styles.card}>
-                                <Text style={styles.titleCard}>HC_SR04</Text>
-                                <Text>{dataHC_SR04}</Text>
+                            <View style={styles.container}>
+                                <Switch
+                                    trackColor={{false: '#767577', true: '#81b0ff'}}
+                                    thumbColor={isEnabledRedLight ? '#f5dd4b' : '#f4f3f4'}
+                                    ios_backgroundColor="#3e3e3e"
+                                    onValueChange={toggleSwitchRedLight}
+                                    value={isEnabledRedLight}
+                                />
                             </View>
                         </View>
                 }

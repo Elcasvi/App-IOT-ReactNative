@@ -30,7 +30,6 @@ const MyTabs=()=>
 {
     return(
         <Tab.Navigator
-        initialRouteName="Home"
         screenOptions={{
             tabBarActiveTintColor: 'black'
         }}>
